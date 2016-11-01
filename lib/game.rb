@@ -1,3 +1,4 @@
+require "pry"
 class Game
  attr_accessor :board, :player_1, :player_2
   WIN_COMBINATIONS = [ [0,1,2],
@@ -125,11 +126,14 @@ def play
  if won?
     if winner == 'X'
         puts "Congratulations X!"
+        return "X"
     elsif  winner == 'O'
          puts "Congratulations O!"
+         return "O"
     end
 elsif  draw?
   puts "Cats Game!"
+  return "D"
 end
 end
 
@@ -142,6 +146,7 @@ puts "0, 1 or 2 player game or wargame"
 n = gets.chomp
 if n == "wargame"
    wargame
+   return
 end
 puts n
 if n.to_i == 0
@@ -172,25 +177,30 @@ end
 def wargame
   n = 1
   result = []
-  while n <=5
+  while n <=50
     puts "starting n= " + n.to_s
-    g = gets
     computer1 = Players::Computer.new('X')
     computer2 = Players::Computer.new('O')
     board = Board.new
     game=Game.new(computer1,computer2,board)
-    game.play
-    puts winner
-    result << n.to_s +" : " + winner 
+    w = game.play
+    puts "winner is " + w
+    result << w
     n = n + 1
-end
-board.reset!
-board=nil
-game=nil
-computer1=nil
-computer2=nil
+    board.reset!
+    board=nil
+    game=nil
+    computer1=nil
+    computer2=nil
+  end
 puts result.to_s
-puts n
+xcount = result.count do | element| element== 'X'end
+ocount = result.count do | element| element== 'O'end
+dcount = result.count do | element| element== 'D'end
+puts xcount.to_s + " X "
+puts ocount.to_s + " O "
+puts dcount.to_s + " D "
+
 end
 
 end
